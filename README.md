@@ -10,3 +10,6 @@ Additionally, the player may type 'save' at any point to save the game.
 # Usage
 To play, simply clone the repository and run `ruby lib/hangman.rb` in the root folder.
 
+The easiest way to play would be to play it on Repl.it. Simply click the Repl.it badge and run.
+
+[![Run on Repl.it](https://replit.com/badge/github/Lucrum/ruby-hangman)](https://replit.com/new/github/Lucrum/ruby-hangman)
