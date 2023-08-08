@@ -71,7 +71,6 @@ class Hangman
     return false if @guessed_letters.include?(input)
 
     @guessed_letters.append(input)
-    print "#{@guessed_letters}\n"
     true
   end
 
