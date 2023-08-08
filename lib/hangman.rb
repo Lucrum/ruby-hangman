@@ -20,6 +20,7 @@ class Hangman
     @victory = false
     @round = 1
     @max_rounds = 16
+    @guessed_letters = []
   end
 
   def prompt_load
@@ -30,11 +31,11 @@ class Hangman
 
   def game_loop
     until @victory || @round > @max_rounds
-      print "Guess #{@round} of #{@max_rounds} | #{@guesses.join(' ')}\n"
+      print "\nGuess #{@round} of #{@max_rounds} | #{@guesses.join(' ')} | Guessed letters: #{@guessed_letters.join('')}\n"
       input = user_input
       if input == 'save'
-        p 'saving!'
         save_game
+        p 'Game saved!'
       else
         guess(input)
         @round += 1
@@ -54,11 +55,24 @@ class Hangman
   def user_input
     print 'Enter your guess, or save: '
     input = gets.downcase.strip
-    until input.match(/(^[a-z]{1}$)|(^save$)/)
+    until verify_guess(input)
       print 'Invalid guess. Try again: '
       input = gets.downcase.strip
     end
     input
+  end
+
+  # makes sure it's a single letter OR save
+  # makes sure it has not been guessed yet
+  # if not, adds letter to guessed pool
+  def verify_guess(input)
+    return false unless input.match(/(^[a-z]{1}$)|(^save$)/)
+    return true if input == 'save'
+    return false if @guessed_letters.include?(input)
+
+    @guessed_letters.append(input)
+    print "#{@guessed_letters}\n"
+    true
   end
 
   def game_end
@@ -96,6 +110,7 @@ class Hangman
     data = JSON.parse save.read
     @word = data['@word']
     @guesses = data['@guesses']
+    @guessed_letters = data['@guessed_letters']
     @victory = data['@victory']
     @round = data['@round']
     @max_rounds = data['@max_rounds']
@@ -113,5 +128,10 @@ class Hangman
     end
   end
 end
+
+puts "Welcome to hangman! You will have 16 tries to guess a 5-12 letter word.
+At any point during your turn, you may type 'save' to save the game.
+
+Let's begin!"
 
 Hangman.new
